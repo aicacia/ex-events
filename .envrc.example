@@ -1,0 +1,4 @@
+export DATABASE_URL="postgresql://postgres:postgres@id-postgresql.api/aicacia_events"
+export SECRET_KEY_BASE="Secret key. You can use `mix phx.gen.secret` to get one"
+export ADMIN_USERNAME="admin"
+export ADMIN_PASSWORD="password"

@@ -1,0 +1,48 @@
+replicas:
+  min: 1
+  max: 4
+  resource:
+    cpu:
+      utilization: 90
+
+image:
+  repository: docker.pkg.github.com/aicacia/ex-events/events-api
+  tag: 0.1.0
+  pullPolicy: Always
+  hash: sha256:13ba025b6c186da3fdce3db68f192721fef8300ae02f2ae76c953d771b7180e4
+
+env:
+  MIX_ENV: prod
+  SECRET_KEY_BASE: qbgJVL1IpRkHGuDI5cDcUFd9rZzAe0tkJ3mOrn7jA+o1LqxHf9p2tOlExC/2ClDH
+  GUARDIAN_TOKEN: vvXIsGE4GNyEUGtPbl2AOYdQ2I/4LIu+Y2yDKgAlVStuVcFbmUVe55lq593WxdCB
+  DATABASE_URL: postgresql://postgres:postgres@events-postgresql.api:5432/aicacia_events
+
+ingress:
+  enabled: true
+  annotations:
+    kubernetes.io/tls-acme: "true"
+    certmanager.k8s.io/cluster-issuer: letsencrypt
+    nginx.ingress.kubernetes.io/secure-backends: "true"
+  hosts:
+    - host: api.events.aicacia.com
+      paths:
+        - /
+  tls:
+    - secretName: api-events-aicacia-com-tls
+      hosts:
+        - api.events.aicacia.com
+
+resources:
+  limits:
+    cpu: 150m
+    memory: 256Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
+
+postgresql:
+  persistence:
+    enabled: true
+    storageClass: linode-block-storage-retain
+  postgresqlUsername: postgres
+  postgresqlPassword: postgres
